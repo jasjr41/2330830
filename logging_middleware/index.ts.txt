@@ -1,0 +1,31 @@
+const ACCESS_TOKEN = "your_token_here"; // paste your token
+
+export async function Log(
+  stack: string,
+  level: string,
+  pkg: string,
+  message: string
+): Promise<void> {
+  try {
+    const response = await fetch(
+      "http://4.224.186.213/evaluation-service/logs",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+        },
+        body: JSON.stringify({
+          stack,
+          level,
+          package: pkg,
+          message,
+        }),
+      }
+    );
+    const data = await response.json();
+    console.log(`[${level.toUpperCase()}] [${pkg}] ${message}`, data);
+  } catch (err) {
+    console.error("Logging failed:", err);
+  }
+}
